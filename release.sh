@@ -146,7 +146,7 @@ linux*)
 	;;
 macosx)
 	# TODO: make ImageJ.app and ImageJ64.app
-	LAUNCHER_NAME=Contents/MacOS/ImageJ &&
+	LAUNCHER_NAME='Contents\/MacOS\/ImageJ' &&
 	INSTALL_REPLACEMENT=";s/\nand.*<\/a>//" &&
 	download_launcher tiger Contents/MacOS/ImageJ-tiger &&
 	download_launcher macosx Contents/MacOS/ImageJ &&
