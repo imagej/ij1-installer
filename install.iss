@@ -7,40 +7,30 @@ AppSupportURL=http://imagej.nih.gov/ij/
 AppUpdatesURL=http://imagej.nih.gov/ij/
 DefaultDirName={pf}\ImageJ
 DefaultGroupName=ImageJ
-OutputBaseFilename=ij146-nojre-setup
-Compression=lzma
 AllowNoIcons=yes
+Compression=lzma
+OutputBaseFilename=ij146-nojre-setup
+SolidCompression=yes
+
+[Tasks]
+Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
+Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
 Source: *; DestDir: "{app}"; Flags: ignoreversion recursesubdirs replacesameversion sortfilesbyextension
 
-[Dirs]
-Name: "{app}";
+[Icons]
+Name: "{group}\ImageJ"; Filename: "{app}\ImageJ.exe"; WorkingDir: {app}
+Name: "{group}\{cm:ProgramOnTheWeb,ImageJ}"; Filename: "{app}\ImageJ.url"
+Name: "{group}\{cm:UninstallProgram,ImageJ}"; Filename: "{uninstallexe}"
+Name: "{userdesktop}\ImageJ"; Filename: "{app}\ImageJ.exe"; Tasks: desktopicon; WorkingDir: {app}
+Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\ImageJ"; Filename: "{app}\ImageJ.exe"; Tasks: quicklaunchicon; WorkingDir: {app}
 
 [Run]
-Filename: "{app}\ImageJ.exe"; Description: "{cm:LaunchProgram,ImageJ}"; Flags: postinstall skipifsilent nowait
-
-[Icons]
-Name: "{group}\ImageJ"; Filename: "{app}\ImageJ.exe"; WorkingDir: "{app}";
-Name: "{group}\{cm:ProgramOnTheWeb,ImageJ}"; Filename: "{app}\ImageJ.url";
-Name: "{group}\{cm:UninstallProgram,ImageJ}"; Filename: "{uninstallexe}";
-Name: "{userdesktop}\ImageJ"; Filename: "{app}\ImageJ.exe"; WorkingDir: "{app}"; Tasks: desktopicon;
-Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\ImageJ"; Filename: "{app}\ImageJ.exe"; WorkingDir: "{app}"; Tasks: quicklaunchicon;
-
-[Tasks]
-Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}";
-Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescription: "{cm:AdditionalIcons}";
+Filename: "{app}\ImageJ.exe"; Description: "{cm:LaunchProgram,ImageJ}"; Flags: nowait postinstall skipifsilent
 
 [UninstallDelete]
-Type: files; Name: "{app}\ImageJ.url";
+Type: files; Name: "{app}\ImageJ.url"
 
-[CustomMessages]
-NameAndVersion=%1 version %2
-AdditionalIcons=Additional icons:
-CreateDesktopIcon=Create a &desktop icon
-CreateQuickLaunchIcon=Create a &Quick Launch icon
-ProgramOnTheWeb=%1 on the Web
-UninstallProgram=Uninstall %1
-LaunchProgram=Launch %1
-AssocFileExtension=&Associate %1 with the %2 file extension
-AssocingFileExtension=Associating %1 with the %2 file extension...
+[Dirs]
+Name: {app}; Permissions: users-modify
