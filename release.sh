@@ -14,6 +14,25 @@ die "Usage: $0 (win32|win64|win-nojre|linux32|linux64|linux-nojre|macosx)"
 test -f ij.jar ||
 die "Need the ij.jar to include in the directory $(pwd)"
 
+if test jenkins = "$1"
+then
+	result=0
+	case "$(uname -s)" in
+	MINGW*|CYGWIN*)
+		platforms="win32 win64 win-nojre"
+		;;
+	*)
+		platforms="linux32 linux64 linux-nojre macosx"
+		;;
+	esac
+	for platform in $platforms
+	do
+		sh -x "${0##*/}" $platform ||
+		result=$?
+	done
+	exit $result
+fi
+
 VERSION="$(java -jar ij.jar -eval \
 	'eval("script", "print(ImageJ.VERSION + ImageJ.BUILD);");' -batch)"
 SHORT_VERSION="$(echo "$VERSION" | tr -d '. ')"
