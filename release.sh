@@ -16,6 +16,8 @@ die "Need the ij.jar to include in the directory $(pwd)"
 
 if test jenkins = "$1"
 then
+	rm -f ij*.{zip,tar.gz} ImageJ*.zip
+
 	result=0
 	case "$(uname -s)" in
 	MINGW*|CYGWIN*)
