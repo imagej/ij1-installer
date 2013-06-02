@@ -146,10 +146,22 @@ linux*)
 	;;
 macosx)
 	# TODO: make ImageJ.app and ImageJ64.app
-	LAUNCHER_NAME='Contents\/MacOS\/ImageJ' &&
-	INSTALL_REPLACEMENT=";s/\nand.*<\/a>//" &&
-	download_launcher tiger Contents/MacOS/ImageJ-tiger &&
-	download_launcher macosx Contents/MacOS/ImageJ &&
+	LAUNCHER_NAME='ImageJ.app' &&
+	REPLACEMENT="$(cat << \EOF |
+and the OS X installation notes are at
+<a href="http://imagej.nih.gov/ij/docs/install/osx.html">imagej.nih.gov/ij/docs/install/osx.html</a>.
+This release includes both 32-bit ("ImageJ") and 64-bit
+(<a href="http://imagej.nih.gov/ij/docs/install/osx.html#memory64">"ImageJ64"</a>)
+applications. "ImageJ64", which is faster and is able to use more than 2 GB of memory,
+requires a 64-bit Intel processor running OS X 10.5 or later.
+The 32-bit version ("ImageJ") is required to run plugins and commands
+(e.g., <i>File&gt;Import&nbsp;As&gt;Using QuickTime</i>) that use QuickTime.
+EOF
+		tr '\n' ' ' |
+		sed -e 's/[\/&]/\\&/g')" &&
+	INSTALL_REPLACEMENT=";s/and.*<\/a>/$REPLACEMENT/" &&
+	(cd macosx && tar cf - *) |
+	(cd ImageJ && tar xf -) &&
 	MAKE_ARTIFACT="zip -9r ImageJ$SHORT_VERSION.zip ImageJ"
 	;;
 *)
