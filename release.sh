@@ -72,7 +72,7 @@ mkdir -p ImageJ &&
 cp ij.jar ImageJ/ &&
 case "$1" in
 win*)
-	LAUNCHER_NAME=ImageJ.exe &&
+	LAUNCHER_REPLACEMENT= &&
 	INSTALL_REPLACEMENT= &&
 	cp install.iss ImageJ/ &&
 	case "$1" in
@@ -120,8 +120,8 @@ win*)
 	MAKE_ARTIFACT="(cd ImageJ && $ISCC install.iss)"
 	;;
 linux*)
-	LAUNCHER_NAME=ImageJ &&
-	INSTALL_REPLACEMENT=";s/\nand.*<\/a>//"
+	LAUNCHER_REPLACEMENT=';s/ImageJ\.exe/ImageJ/;s/Windows/Linux/' &&
+	INSTALL_REPLACEMENT=";s/\nand.*<\/a>//" &&
 	case "$1" in
 	*32)
 		JRE_REPLACEMENT="s/64-bit/32-bit/" &&
@@ -146,7 +146,7 @@ linux*)
 	;;
 macosx)
 	# TODO: make ImageJ.app and ImageJ64.app
-	LAUNCHER_NAME='ImageJ.app' &&
+	LAUNCHER_REPLACEMENT=';s/ImageJ\.exe/ImageJ.app and ImageJ64.app/;s/launcher/app/;s/Windows/MacOSX/' &&
 	REPLACEMENT="$(cat << \EOF |
 and the OS X installation notes are at
 <a href="http://imagej.nih.gov/ij/docs/install/osx.html">imagej.nih.gov/ij/docs/install/osx.html</a>.
@@ -173,7 +173,7 @@ cp -R app/* ImageJ &&
 sed -i \
 	-e "s/1\.46/$VERSION/g" \
 	-e "/The ImageJ website is at/{N;N;N$INSTALL_REPLACEMENT}" \
-	-e "/<dt><b>ImageJ\.exe<\/b><\/dt>/s/ImageJ\.exe/$LAUNCHER_NAME/" \
+	-e "/<dt><b>ImageJ\.exe<\/b><\/dt>/{N$LAUNCHER_REPLACEMENT}" \
 	-e "/<dt><b>jre<\/b><\/dt>/{N;$JRE_REPLACEMENT}" \
 	ImageJ/README.html &&
 eval $MAKE_ARTIFACT
