@@ -142,6 +142,8 @@ linux*)
 		die "Unknown architecture: $1"
 		;;
 	esac &&
+	(cd linux && tar cf - *) |
+	(cd ImageJ && tar xf -) &&
 	MAKE_ARTIFACT="tar czvf ij$SHORT_VERSION-$1.tar.gz ImageJ"
 	;;
 macosx)
