@@ -32,7 +32,8 @@ then
 			type jenkins-cli 2>&1 > /dev/null
 		then
 			jenkins-cli groovy add-jenkins-badge.groovy \
-				"$JOB_NAME" "$BUILD_NUMBER" "$VERSION"
+				"${JOB_NAME%/label=*}" "$BUILD_NUMBER" \
+				"$VERSION"
 		fi
 		platforms="linux32 linux64 linux-nojre macosx"
 		;;
