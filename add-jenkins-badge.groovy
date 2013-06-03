@@ -1,12 +1,14 @@
 #!/usr/bin/jenkins-cli groovy
 
-# A simple script to be called using
-#
-#	jenkins-cli groovy add-jenkins-badge.groovy \
-#		"$JOB_NAME" "$BUILD_NUMBER" "<text>"
-#
-# to attach a little text to the given build (stealing Groovy Postbuild's
-# addShortText(String) functionality).
+/*
+ * A simple script to be called using
+ *
+ *	jenkins-cli groovy add-jenkins-badge.groovy \
+ *		"$JOB_NAME" "$BUILD_NUMBER" "<text>"
+ *
+ * to attach a little text to the given build (stealing Groovy Postbuild's
+ * addShortText(String) functionality).
+ */
 
 if (this.args.length != 3) {
 	throw new IllegalArgumentException("Usage: add-jenkins-badge <job> <build-number> <text>")
