@@ -14,6 +14,10 @@ die "Usage: $0 (win32|win64|win-nojre|linux32|linux64|linux-nojre|macosx)"
 test -f ij.jar ||
 die "Need the ij.jar to include in the directory $(pwd)"
 
+VERSION="$(java -jar ij.jar -eval \
+	'eval("script", "print(ImageJ.VERSION + ImageJ.BUILD);");' -batch)" ||
+die 'Could not obtain the ImageJ version from the ij.jar file'
+
 if test jenkins = "$1"
 then
 	rm -f ij*.exe ij*.tar.gz ImageJ*.zip
@@ -24,6 +28,12 @@ then
 		platforms="win32 win64 win-nojre"
 		;;
 	*)
+		if test -n "$JOB_NAME" && test -n "$BUILD_NUMBER" &&
+			type jenkins-cli 2>&1 > /dev/null
+		then
+			jenkins-cli groovy add-jenkins-badge.groovy \
+				"$JOB_NAME" "$BUILD_NUMBER" "$VERSION"
+		fi
 		platforms="linux32 linux64 linux-nojre macosx"
 		;;
 	esac
@@ -35,8 +45,6 @@ then
 	exit $result
 fi
 
-VERSION="$(java -jar ij.jar -eval \
-	'eval("script", "print(ImageJ.VERSION + ImageJ.BUILD);");' -batch)"
 SHORT_VERSION="$(echo "$VERSION" | tr -d '. ')"
 
 JENKINS_URL=http://jenkins.imagej.net/
