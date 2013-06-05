@@ -10,6 +10,12 @@
  * addShortText(String) functionality).
  */
 
+removeBadge = false
+if (this.args.length > 3 && "remove".equals(this.args[0])) {
+	removeBadge = true
+	this.args = this.args[1..-1].toArray()
+}
+
 if (this.args.length != 3) {
 	throw new IllegalArgumentException("Usage: add-jenkins-badge <job> <build-number> <text>")
 }
@@ -22,6 +28,29 @@ if (projectName != null && version != null) {
 	map = jenkins.model.Jenkins.instance.getItemMap()
 	project = map.get(projectName)
 	build = project.getBuildByNumber(buildNumber)
+
+	if (removeBadge) {
+		actionsList = [ build.getActions() ]
+		if (build instanceof hudson.matrix.MatrixBuild) {
+			build.getRuns().each() {
+				run -> actionsList.add(run.getActions())
+			}
+		}
+		removeCount = 0
+		actionsList.each() {
+			actions ->
+			for (i = actions.size() - 1; i >= 0; i--) {
+				action = actions.get(i)
+				if (action.getClass().getName().endsWith(".GroovyPostbuildAction") &&
+						version.equals(action.getText())) {
+					actions.remove(i)
+					removeCount++
+				}
+			}
+		}
+		println("Removed " + removeCount + " badges")
+		return
+	}
 
 	loader = jenkins.model.Jenkins.getInstance().getPluginManager().uberClassLoader
 	clazz = loader.loadClass("org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildAction")
