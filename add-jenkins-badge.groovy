@@ -67,7 +67,7 @@ if (projectName != null && version != null) {
 		// letter and trailing digit(s): daily build
 		background = "#FFFF00"
 	}
-	action = clazz.createShortText(version, "#000000", background,"1px", "#000000")
+	action = clazz.createShortText(version, "#000000", background, "1px", "#C0C000")
 
 	build.getActions().add(action)
 
