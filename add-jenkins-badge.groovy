@@ -54,7 +54,19 @@ if (projectName != null && version != null) {
 
 	loader = jenkins.model.Jenkins.getInstance().getPluginManager().uberClassLoader
 	clazz = loader.loadClass("org.jvnet.hudson.plugins.groovypostbuild.GroovyPostbuildAction")
-	background = (version.matches("^[^A-Za-z]+$")?"#00FF00":version.matches("^.+?\\d$")?"#FFAA00":"#FFFF00");
+	matcher = java.util.regex.Pattern.compile('.*?([a-z]+)?([0-9]+)?$').matcher(version)
+	if (!matcher.matches()) {
+		throw new IllegalArgumentException("Cannot handle version: " + version)
+	} else if (matcher.group(1) == null) {
+		// no letter: major version
+		background = "#FFAA00"
+	} else if (matcher.group(2) == null) {
+		// letter, but no digit after that: minor version ("letter" version)
+		background = "#00FF00"
+	} else {
+		// letter and trailing digit(s): daily build
+		background = "#FFFF00"
+	}
 	action = clazz.createShortText(version, "#000000", background,"1px", "#000000")
 
 	build.getActions().add(action)
