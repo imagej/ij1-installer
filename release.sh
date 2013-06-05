@@ -55,7 +55,7 @@ WINDOWS_32_LAUNCHER_URL=$WINDOWS_BUILD_URL/artifact/ImageJ1-win32.exe
 WINDOWS_64_LAUNCHER_URL=$WINDOWS_BUILD_URL/artifact/ImageJ1-win64.exe
 LAUNCHER_JOB_URL=$JENKINS_URL/job/ImageJ-launcher
 LAUNCHER_BUILD_URL=$LAUNCHER_JOB_URL/label=master/lastSuccessfulBuild
-LAUNCHER_NAR_URL=$LAUNCHER_BUILD_URL/artifact/launcher/target/nar/
+LAUNCHER_NAR_URL=$LAUNCHER_BUILD_URL/artifact/target/nar/
 PATTERN=ij-launcher-2.0.0-SNAPSHOT-X-gcc-executable/bin/X-gcc/ij-launcher
 LAUNCHER_URL_PATTERN=$LAUNCHER_NAR_URL/$PATTERN
 
