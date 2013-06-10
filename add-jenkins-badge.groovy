@@ -60,12 +60,15 @@ if (projectName != null && version != null) {
 	} else if (matcher.group(1) == null) {
 		// no letter: major version
 		background = "#FFAA00"
+		tag = 'major'
 	} else if (matcher.group(2) == null) {
 		// letter, but no digit after that: minor version ("letter" version)
 		background = "#00FF00"
+		tag = 'minor'
 	} else {
 		// letter and trailing digit(s): daily build
 		background = "#FFFF00"
+		tag = 'daily'
 	}
 	action = clazz.createShortText(version, "#000000", background, "1px", "#C0C000")
 
@@ -76,4 +79,21 @@ if (projectName != null && version != null) {
 			run -> run.getActions().add(action)
 		}
 	}
+
+	workspace = build.getWorkspace()
+	if (workspace != null) {
+		postBuild = workspace.child("postbuild.groovy")
+		out = new java.io.PrintStream(postBuild.write())
+		out.print("this.args = (String[])['")
+		out.print(projectName)
+		out.print("', '")
+		out.print(tag)
+		out.print("', '")
+		out.print(buildNumber)
+		out.print("'] //")
+		script = workspace.child("make-jenkins-links.groovy")
+		script.copyTo(out)
+		out.close()
+	}
+
 }
