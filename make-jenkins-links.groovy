@@ -33,7 +33,17 @@ if (projectName != null) {
 	project = map.get(projectName)
 	build = project.getBuildByNumber(buildNumber)
 
-	failed = build.result.isWorseThan(hudson.model.Result.SUCCESS)
+	if (build.result != null) {
+		failed = build.result.isWorseThan(hudson.model.Result.SUCCESS)
+	} else {
+		failed = false
+		build.getRuns().each() {
+			run ->
+			if (run.result.isWorseThan(hudson.model.Result.SUCCESS)) {
+				failed = true
+			}
+		}
+	}
 	adjective = (failed ? "un" : "") + "successful"
 
 	labels = []
