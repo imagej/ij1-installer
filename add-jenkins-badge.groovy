@@ -8,6 +8,29 @@
  *
  * to attach a little text to the given build (stealing Groovy Postbuild's
  * addShortText(String) functionality).
+ *
+ * It also writes a postbuild Groovy script that adds links to userContent/,
+ * aggregating artifacts, and links to the job description. This script should
+ * be run by configuring this Groovy snippet as Postbuild Groovy:
+ *
+ * // determine whether any axis besides the current one is still building
+ * isBuilding = false
+ * manager.build.getParentBuild().getRuns().each() {
+ *         run ->
+ *         if (!run.equals(manager.build) && run.isBuilding()) {
+ *                 isBuilding = true
+ *         }
+ * }
+ *
+ * // get the path to the postbuild script
+ * root = manager.build.getParentBuild().getProject().getBuildDir()
+ * postBuild = new hudson.FilePath(root).child("../workspace/postbuild.groovy")
+ *
+ * // run the postbuild script only after all the artifacts were made
+ * if (!isBuilding && postBuild != null && postBuild.exists()) {
+ *   shell = new GroovyShell(new Binding(manager: manager))
+ *   shell.evaluate(new java.io.InputStreamReader(postBuild.read()))
+ * }
  */
 
 removeBadge = false
