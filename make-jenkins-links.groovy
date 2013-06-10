@@ -10,7 +10,7 @@ buildNumber = Integer.parseInt(this.args[2])
 
 instance = jenkins.model.Jenkins.instance
 
-outputDirectory = new File(instance.root, "userContent/" + tag)
+outputDirectory = new File(instance.root, "userContent/ij1-" + tag)
 if (!outputDirectory.isDirectory()) outputDirectory.mkdirs()
 else {
 	list = outputDirectory.listFiles()
