@@ -14,6 +14,11 @@ die "Usage: $0 (win32|win64|win-nojre|linux32|linux64|linux-nojre|macosx)"
 test -f ij.jar ||
 die "Need the ij.jar to include in the directory $(pwd)"
 
+VERSION="$(javap -v -cp ij.jar ij.ImageJ 2> /dev/null |
+	grep -A3 -e 'VERSION' -e 'BUILD' |
+	sed -n 's/.*ConstantValue: String //p' |
+	tr -d '\n')"
+test -n "$VERSION" ||
 VERSION="$(java -jar ij.jar -eval \
 	'eval("script", "print(ImageJ.VERSION + ImageJ.BUILD);");' -batch)" ||
 die 'Could not obtain the ImageJ version from the ij.jar file'
