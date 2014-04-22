@@ -5,6 +5,20 @@ die () {
 	exit 1
 }
 
+case "$(uname -s)" in
+Darwin)
+	sed () {
+		if test a-i = a"$1"
+		then
+			shift
+			/usr/bin/sed -i "" "$@"
+		else
+			/usr/bin/sed "$@"
+		fi
+	}
+	;;
+esac
+
 cd "$(dirname "$0")" ||
 die "Could not find the working directory"
 
@@ -190,8 +204,14 @@ esac &&
 cp -R app/* ImageJ &&
 sed -i \
 	-e "s/1\.46/$VERSION/g" \
-	-e "/The ImageJ website is at/{N;N;N$INSTALL_REPLACEMENT}" \
-	-e "/<dt><b>ImageJ\.exe<\/b><\/dt>/{N$LAUNCHER_REPLACEMENT}" \
-	-e "/<dt><b>jre<\/b><\/dt>/{N;$JRE_REPLACEMENT}" \
+	-e '/The ImageJ website is at/{
+N;N;N'"$INSTALL_REPLACEMENT"'
+}' \
+	-e '/<dt><b>ImageJ\.exe<\/b><\/dt>/{
+N'"$LAUNCHER_REPLACEMENT"'
+}' \
+	-e '/<dt><b>jre<\/b><\/dt>/{
+N'"$JRE_REPLACEMENT"'
+}' \
 	ImageJ/README.html &&
 eval $MAKE_ARTIFACT
