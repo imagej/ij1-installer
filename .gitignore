@@ -5,3 +5,4 @@
 /*.exe
 /*.tar.gz
 /*.zip
+/postbuild.groovy
